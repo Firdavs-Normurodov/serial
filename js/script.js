@@ -40,7 +40,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
   //Timer
-  const deadline = "2024-05-07";
+  const deadline = "2024-06-07";
   function getTimerRemaining(endTime) {
     let days, hours, minutes, seconds;
     const timer = Date.parse(endTime) - Date.parse(new Date());
@@ -113,7 +113,7 @@ window.addEventListener("DOMContentLoaded", () => {
       closeModal();
     }
   });
-  // const modalTimerId = setTimeout(openModal, 10000);
+  const modalTimerId = setTimeout(openModal, 100000);
   function showModalByScroll() {
     if (
       window.pageYOffset + document.documentElement.clientHeight >=
@@ -165,40 +165,49 @@ window.addEventListener("DOMContentLoaded", () => {
       this.parent.append(element);
     }
   }
-  new MenuCard(
-    "img/tabs/1.png",
-    "vegy",
-    'Plan "Usual"',
-    "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi, dignissimos? Beatae consequatur iusto fuga ad corrupti porro officiis qui. Ducimus esse culpa officiis delectus velit minima adipisci quaerat sit, nihil tempore unde nam! Nobis, voluptate.",
-    10,
-    ".menu .container"
-  ).render();
-  new MenuCard(
-    "img/tabs/2.jpg",
-    "elite",
-    "Plan “Premium”",
-    "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi, dignissimos? Beatae consequatur iusto fuga ad corrupti porro officiis qui. Ducimus esse culpa officiis delectus velit minima adipisci quaerat sit, nihil tempore unde nam! Nobis, voluptate.",
-    15,
-    ".menu .container"
-  ).render();
-  new MenuCard(
-    "img/tabs/3.jpg",
-    "post",
-    'Plan "VIP"',
-    "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi, dignissimos? Beatae consequatur iusto fuga ad corrupti porro officiis qui. Ducimus esse culpa officiis delectus velit minima adipisci quaerat sit, nihil tempore unde nam! Nobis, voluptate.",
-    12,
-    ".menu .container"
-  ).render();
+  axios.get("http://localhost:3000/menu").then((data) => {
+    data.data.forEach(({ img, altimg, title, descr, price }) => {
+      new MenuCard(
+        img,
+        altimg,
+        title,
+        descr,
+        price,
+        ".menu .container"
+      ).render();
+    });
+  });
+  // async function getReSource(url) {
+  //   const res = await fetch(url);
+  //   return await res.json();
+  // }
+  // getReSource("http://localhost:3000/menu").then((data) => {});
+
   const forms = document.querySelectorAll("form");
   forms.forEach((form) => {
-    postData(form);
+    binPostData(form);
   });
+
   const msg = {
     loading: "img/spinner.svg",
     succes: "Thank's for submiting our form",
     failure: "Something went wrong",
   };
-  function postData(form) {
+
+  async function postData(url, data) {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: data,
+    });
+    if (!res.ok) {
+      throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+    }
+    return await res.json();
+  }
+  function binPostData(form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const statusMsg = document.createElement("img");
@@ -208,28 +217,20 @@ window.addEventListener("DOMContentLoaded", () => {
         margin: 0 auto;
       `;
       form.insertAdjacentElement("afterend", statusMsg);
-      const request = new XMLHttpRequest();
-      request.open("POST", "server.php");
-      request.setRequestHeader("Content-Type", "Multipart/aplication/json");
-      const obj = {};
       const formData = new FormData(form);
-      formData.forEach((val, key) => {
-        obj[key] = val;
-      });
-      const json = JSON.stringify(obj);
-      request.send(json);
-      request.addEventListener("load", () => {
-        if (request.status == 200) {
-          console.log(request.response);
+      const json = JSON.stringify(Object.fromEntries(formData.entries()));
+      postData("http://localhost:3000/request", json)
+        .then((data) => {
+          console.log(data);
           showThankModal(msg.succes);
-          form.reset();
-          setTimeout(() => {
-            statusMsg.remove();
-          }, 2000);
-        } else {
+          statusMsg.remove();
+        })
+        .catch(() => {
           showThankModal(msg.failure);
-        }
-      });
+        })
+        .finally(() => {
+          form.reset();
+        });
     });
   }
   function showThankModal(message) {

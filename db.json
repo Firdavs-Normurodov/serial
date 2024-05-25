@@ -1,0 +1,45 @@
+{
+  "menu": [
+    {
+      "img": "img/tabs/1.png",
+      "altimg": "vegy",
+      "title": "Plan Usual",
+      "descr": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi, dignissimos? Beatae consequatur iusto fuga ad corrupti porro officiis qui. Ducimus esse culpa officiis delectus velit minima adipisci quaerat sit, nihil tempore unde nam! Nobis, voluptate.",
+      "price": 10,
+      "id": "44d0"
+    },
+    {
+      "img": "img/tabs/2.jpg",
+      "altimg": "elite",
+      "title": "Plan “Premium”",
+      "descr": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi, dignissimos? Beatae consequatur iusto fuga ad corrupti porro officiis qui. Ducimus esse culpa officiis delectus velit minima adipisci quaerat sit, nihil tempore unde nam! Nobis, voluptate.",
+      "price": 20,
+      "id": "fc78"
+    },
+    {
+      "img": "img/tabs/3.jpg",
+      "altimg": "post",
+      "title": "Plan VIP",
+      "descr": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi, dignissimos? Beatae consequatur iusto fuga ad corrupti porro officiis qui. Ducimus esse culpa officiis delectus velit minima adipisci quaerat sit, nihil tempore unde nam! Nobis, voluptate.",
+      "price": 30,
+      "id": "aac6"
+    }
+  ],
+  "request": [
+    {
+      "id": "21ce",
+      "name": "Firdavs",
+      "phone": "+998887200724"
+    },
+    {
+      "id": "83a6",
+      "name": "Firdavs",
+      "phone": "+998887200724"
+    },
+    {
+      "id": "a4aa",
+      "name": "Firdavs",
+      "phone": "+998887200724"
+    }
+  ]
+}
