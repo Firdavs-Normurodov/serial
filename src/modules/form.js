@@ -1,12 +1,14 @@
+import { openModal, closeModal } from "./modal";
+
 function form() {
   const forms = document.querySelectorAll("form");
   forms.forEach((form) => {
-    binPostData(form);
+    bindPostData(form);
   });
 
   const msg = {
     loading: "img/spinner.svg",
-    succes: "Thank's for submiting our form",
+    success: "Thank you for submitting our form",
     failure: "Something went wrong",
   };
 
@@ -23,53 +25,45 @@ function form() {
     }
     return await res.json();
   }
-  function binPostData(form) {
+
+  function bindPostData(form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const statusMsg = document.createElement("img");
       statusMsg.src = msg.loading;
       statusMsg.style.cssText = `
-       display: block;
-       margin: 0 auto;
-     `;
+        display: block;
+        margin: 0 auto;
+      `;
       form.insertAdjacentElement("afterend", statusMsg);
       const formData = new FormData(form);
       const json = JSON.stringify(Object.fromEntries(formData.entries()));
       postData("http://localhost:3000/request", json)
         .then((data) => {
           console.log(data);
-          showThankModal(msg.succes);
-          statusMsg.remove();
+          showThankModal(msg.success);
         })
         .catch(() => {
           showThankModal(msg.failure);
         })
         .finally(() => {
+          statusMsg.remove();
           form.reset();
         });
     });
   }
+
   function showThankModal(message) {
-    const prevModalDialog = document.querySelector(".modal__dialog");
-    prevModalDialog.classList.add("hide");
-    openModal();
-    const thankModal = document.createElement("div");
-    thankModal.classList.add("modal__dialog");
-    thankModal.innerHTML = `
-     <div class="modal__content">
-       <div data-close class="modal__close">&times;</div>
-       <div class="modal__title">
-      ${message}
-     </div>
-     </div>
-   `;
-    document.querySelector(".modal").append(thankModal);
+    openModal(".modal"); // Ensure the correct selector is used
+    const modalContent = document.querySelector(".modal__content");
+    modalContent.innerHTML = `
+      <div class="modal__title">${message}</div>
+      <div data-close class="modal__close">&times;</div>
+    `;
     setTimeout(() => {
-      thankModal.remove();
-      prevModalDialog.classList.add("show");
-      prevModalDialog.classList.remove("hide");
-      closeModal();
+      closeModal(".modal"); // Ensure the correct selector is used
     }, 4000);
   }
 }
-module.exports = form;
+
+export default form;

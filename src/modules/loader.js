@@ -9,4 +9,4 @@ function loader() {
     }, 500);
   }, 2000);
 }
-module.exports = loader;
+export default loader;

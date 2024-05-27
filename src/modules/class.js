@@ -57,4 +57,4 @@ function clas() {
   // }
   // getReSource("http://localhost:3000/menu").then((data) => {});
 }
-module.exports = clas;
+export default clas;

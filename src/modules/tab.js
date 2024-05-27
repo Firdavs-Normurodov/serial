@@ -32,4 +32,4 @@ function tab() {
     }
   });
 }
-module.exports = tab;
+export default tab;
